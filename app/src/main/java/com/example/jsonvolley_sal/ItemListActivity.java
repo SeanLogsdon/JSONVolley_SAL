@@ -82,10 +82,7 @@ public class ItemListActivity extends AppCompatActivity {
     }
 
     private void testTheVolleyJazz(){
-
-        tollbar.setTitle("At least the button works hehe");
-
-        String url = "https://api.jsonbin.io/b/5f726a107243cd7e8245d58b";  // THAT should be in a strings.xml file!
+            String url = "https://api.jsonbin.io/b/5f7f74b67243cd7e824cfe79";  // THAT should be in a strings.xml file!
 
             // Instantiate the RequestQueue.
             RequestQueue queue = Volley.newRequestQueue(this);
@@ -104,7 +101,7 @@ public class ItemListActivity extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     // you should drop a breakpoint RIGHT HERE if you need to see the error coming back
-                    tollbar.setTitle("That didn't work!");
+                    tollbar.setTitle("bruh, That didn't work!");
 
                 }
             });
