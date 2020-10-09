@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">JSONVolley_SAL</string>
     <string name="title_item_detail">Item Detail</string>
+    <string name="URL">https://api.jsonbin.io/b/5f7f74b67243cd7e824cfe79</string>
 </resources>

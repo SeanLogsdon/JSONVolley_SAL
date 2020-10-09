@@ -3,7 +3,6 @@ package com.example.jsonvolley_sal;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,7 +23,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.jsonvolley_sal.dummy.DummyContent;
-
 import java.util.List;
 
 /**
