@@ -1,4 +1,4 @@
-package com.example.jsonvolley_sal.dummy;
+package com.example.jsonvolley_sal;
 
 import android.content.Context;
 

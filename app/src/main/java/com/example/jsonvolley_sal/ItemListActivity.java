@@ -17,6 +17,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,19 @@ public class ItemListActivity extends AppCompatActivity {
     private boolean mTwoPane;
     private Toolbar tollbar;
 
+    private static DataGrabber grabbyData = new DataGrabber();
+
+    final Handler handler = new Handler();
+    final Runnable r = new Runnable() {
+        public void run() {
+            RecyclerView recyclerView = findViewById(R.id.item_list);
+
+            // Must CHECK IF RECYCLER IS NOT NULL!!!!
+            assert recyclerView != null;
+            setupRecyclerView(recyclerView);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,14 +65,14 @@ public class ItemListActivity extends AppCompatActivity {
         setSupportActionBar(tollbar);
         tollbar.setTitle(getTitle());
 
+        grabbyData.getThatDataFromThatURL(this);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-
-                testTheVolleyJazz();
             }
         });
 
@@ -69,59 +83,26 @@ public class ItemListActivity extends AppCompatActivity {
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
-
-        View recyclerView = findViewById(R.id.item_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+        handler.postDelayed(r, 1000);
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, DummyContent.ITEMS, mTwoPane));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, grabbyData.Chrac, mTwoPane));
     }
-
-    private void testTheVolleyJazz(){
-            String url = "https://api.jsonbin.io/b/5f7f74b67243cd7e824cfe79";  // THAT should be in a strings.xml file!
-
-            // Instantiate the RequestQueue.
-            RequestQueue queue = Volley.newRequestQueue(this);
-
-            // Request a string response from the provided URL.
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            // Display the response string.
-                            tollbar.setTitle("Response is: "+ response);
-                            // NEXT, we need to use GSON to turn that JSON into a model
-                        }
-                    }, new Response.ErrorListener() {
-
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    // you should drop a breakpoint RIGHT HERE if you need to see the error coming back
-                    tollbar.setTitle("bruh, That didn't work!");
-
-                }
-            });
-
-            // Add the request to the RequestQueue.
-            queue.add(stringRequest);
-    }
-
 
     public static class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final ItemListActivity mParentActivity;
-        private final List<DummyContent.DummyItem> mValues;
+        private final List<BestCharacters> mValues;
         private final boolean mTwoPane;
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DummyContent.DummyItem item = (DummyContent.DummyItem) view.getTag();
+                BestCharacters item = (BestCharacters) view.getTag();
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
-                    arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.id);
+                    arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.character);
                     ItemDetailFragment fragment = new ItemDetailFragment();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction()
@@ -130,7 +111,7 @@ public class ItemListActivity extends AppCompatActivity {
                 } else {
                     Context context = view.getContext();
                     Intent intent = new Intent(context, ItemDetailActivity.class);
-                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, item.id);
+                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, item.bestplace);
 
                     context.startActivity(intent);
                 }
@@ -138,7 +119,7 @@ public class ItemListActivity extends AppCompatActivity {
         };
 
         SimpleItemRecyclerViewAdapter(ItemListActivity parent,
-                                      List<DummyContent.DummyItem> items,
+                                      List<BestCharacters> items,
                                       boolean twoPane) {
             mValues = items;
             mParentActivity = parent;
@@ -154,8 +135,8 @@ public class ItemListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.mIdView.setText(mValues.get(position).character);
+            holder.mContentView.setText(String.valueOf(mValues.get(position).gsp));
 
             holder.itemView.setTag(mValues.get(position));
             holder.itemView.setOnClickListener(mOnClickListener);

@@ -3,8 +3,8 @@ package com.example.jsonvolley_sal;
 import android.app.Activity;
 import android.os.Bundle;
 
-import com.example.jsonvolley_sal.dummy.DataGrabber;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.example.jsonvolley_sal.dummy.DummyContent;
 
 import androidx.fragment.app.Fragment;
 
